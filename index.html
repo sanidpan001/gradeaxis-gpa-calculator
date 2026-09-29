@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeAxis — Free GPA & CGPA Calculator (4.0, 5.0, 10.0 & German Scales)</title>
+<meta name="description" content="GradeAxis is a free GPA calculator supporting 4.0, 5.0, 10.0 (Indian CGPA) and German 1.0–5.0 scales. Add courses, track semesters, plan your target CGPA. Unlimited free usage, no signup.">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body{ font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:#F7F4EA; color:#1F2937; }
+  .serif{ font-family: Georgia, "Times New Roman", serif; }
+  .report-card{ background:#FFFDF7; border:3px double #1E3A8A; box-shadow: 0 10px 30px rgba(30,58,138,.10); }
+  .rule-double{ border-top:3px double #1E3A8A; }
+  .rule-single{ border-top:1px solid #1E3A8A; }
+  .stamp{ border:2px solid #B91C1C; color:#B91C1C; transform: rotate(-4deg); }
+  .scale-tab{ border:2px solid #1E3A8A; color:#1E3A8A; background:#fff; }
+  .scale-tab.active{ background:#1E3A8A; color:#F7F4EA; }
+  input[type=number]::-webkit-inner-spin-button{ opacity:1; }
+  select, input[type=text], input[type=number]{ background:#fff; }
+  select:focus, input:focus, button:focus-visible{ outline:2px solid #B91C1C; outline-offset:1px; }
+  .faq-item summary{ cursor:pointer; }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  @media print{
+    .no-print{ display:none !important; }
+    body{ background:#fff; }
+    .report-card{ box-shadow:none; }
+  }
+</style>
+</head>
+<body id="top" class="min-h-screen">
+
+<!-- Sticky header -->
+<header class="no-print sticky top-0 z-40 border-b-[3px] border-double" style="border-color:#1E3A8A; background:#F7F4EA;">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="#top" class="serif text-2xl font-bold tracking-tight" style="color:#1E3A8A;">Grade<span style="color:#B91C1C;">Axis</span></a>
+    <nav class="flex items-center gap-5 text-sm font-semibold" style="color:#1E3A8A;">
+      <a href="#top" class="hover:underline">Home</a>
+      <a href="https://fixoraa.tech" class="hover:underline">More Tools</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-2 text-center">
+  <p class="text-[11px] tracking-[0.3em] uppercase font-semibold" style="color:#B91C1C;">Official Academic Worksheet</p>
+  <h1 class="serif text-4xl sm:text-5xl font-bold mt-2" style="color:#1E3A8A;">GradeAxis</h1>
+  <p class="serif italic text-lg mt-1" style="color:#1F2937;">GPA &amp; CGPA Calculator — every scale, one report card</p>
+  <div class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+    <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border-2" style="border-color:#B91C1C; color:#B91C1C; background:#fff;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      Unlimited Free Usage
+    </span>
+    <span class="text-xs font-semibold px-3 py-1.5 rounded-full" style="background:#1E3A8A; color:#F7F4EA;">No signup &middot; No paywall &middot; No watermark</span>
+  </div>
+  <p class="mt-4 max-w-2xl mx-auto text-sm leading-relaxed" style="color:#4B5563;">
+    Enter your courses below and GradeAxis computes your semester GPA instantly — on the US 4.0 scale,
+    the 5.0 scale, the Indian 10.0 CGPA scale, or the inverted German 1.0–5.0 scale. Save semesters to your
+    personal ledger, watch your cumulative CGPA grow, and use the planner to see exactly what grades you need
+    to hit your target. Everything runs in your browser; your data never leaves your device.
+  </p>
+</section>
+
+<!-- TOP AD -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pt-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <div class="origin-top scale-[0.44] sm:scale-100 shrink-0">
+        <script>
+          atOptions = { 'key' : '4e68ac77881c17fe128a46565d9a4e8c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script src="https://www.highrevenueformat.com/4e68ac77881c17fe128a46565d9a4e8c/invoke.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOOL ============ -->
+<main class="mx-auto max-w-6xl px-4 sm:px-6 py-6">
+<div class="report-card rounded-sm p-4 sm:p-8">
+
+  <!-- Report card masthead -->
+  <div class="flex flex-wrap items-start justify-between gap-4 pb-4">
+    <div>
+      <p class="text-[10px] tracking-[0.25em] uppercase font-bold" style="color:#B91C1C;">GradeAxis &middot; Form GA-2026</p>
+      <h2 class="serif text-2xl sm:text-3xl font-bold" style="color:#1E3A8A;">Semester Worksheet &amp; Academic Ledger</h2>
+      <p class="text-xs mt-1" style="color:#6B7280;">All calculations are performed locally in your browser. Print this page for a clean report.</p>
+    </div>
+    <div class="stamp serif text-xs font-bold uppercase tracking-widest px-3 py-2 rounded-sm">Verified<br>Math</div>
+  </div>
+  <div class="rule-double mb-6"></div>
+
+  <!-- 1. Scale selector -->
+  <section aria-label="Grading scale">
+    <h3 class="serif text-lg font-bold mb-2" style="color:#1E3A8A;">1 &middot; Choose your grading scale</h3>
+    <div id="scaleTabs" class="flex flex-wrap gap-2" role="tablist" aria-label="Grading scale options">
+      <button type="button" data-scale="4.0" class="scale-tab active serif text-sm font-bold px-4 py-2 rounded-sm">4.0 &middot; US</button>
+      <button type="button" data-scale="5.0" class="scale-tab serif text-sm font-bold px-4 py-2 rounded-sm">5.0 scale</button>
+      <button type="button" data-scale="10.0" class="scale-tab serif text-sm font-bold px-4 py-2 rounded-sm">10.0 &middot; Indian CGPA</button>
+      <button type="button" data-scale="german" class="scale-tab serif text-sm font-bold px-4 py-2 rounded-sm">German 1.0–5.0</button>
+    </div>
+    <p id="scaleNote" class="text-xs mt-2 italic" style="color:#6B7280;"></p>
+    <label class="mt-3 inline-flex items-center gap-2 text-sm font-semibold cursor-pointer select-none" style="color:#1F2937;">
+      <input id="weightedToggle" type="checkbox" class="w-4 h-4 accent-[#B91C1C]">
+      Weighted GPA — Honors courses +0.5, AP/IB courses +1.0
+      <span class="text-xs font-normal" style="color:#6B7280;">(German scale: −0.5 / −1.0, lower is better)</span>
+    </label>
+  </section>
+
+  <div class="rule-single my-6"></div>
+
+  <!-- 2. Course table -->
+  <section aria-label="Courses">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+      <h3 class="serif text-lg font-bold" style="color:#1E3A8A;">2 &middot; Enter your courses</h3>
+      <div class="flex gap-2">
+        <button id="addCourse" type="button" class="text-sm font-bold px-4 py-2 rounded-sm text-white" style="background:#B91C1C;">+ Add course</button>
+        <button id="clearCourses" type="button" class="text-sm font-semibold px-4 py-2 rounded-sm border-2" style="border-color:#1E3A8A; color:#1E3A8A;">Clear</button>
+      </div>
+    </div>
+    <div class="hidden md:grid grid-cols-12 gap-2 text-[11px] font-bold uppercase tracking-wider mb-1 px-1" style="color:#1E3A8A;">
+      <div class="col-span-4">Course name</div><div class="col-span-2">Credits</div><div class="col-span-2">Grade</div>
+      <div class="col-span-2">Level</div><div class="col-span-1 text-right">Points</div><div class="col-span-1"></div>
+    </div>
+    <div id="courseRows" class="space-y-2"></div>
+    <p class="text-xs mt-2" style="color:#6B7280;">Tip: rows with missing grades or zero credits are ignored in the math. Grade F always counts as 0 points (5.0 on the German scale), even in weighted mode.</p>
+  </section>
+
+  <div class="rule-single my-6"></div>
+
+  <!-- 3. Semester result -->
+  <section aria-label="Semester GPA result">
+    <h3 class="serif text-lg font-bold mb-3" style="color:#1E3A8A;">3 &middot; Semester result</h3>
+    <div class="grid md:grid-cols-2 gap-6 items-center">
+      <div id="gpaDial" class="flex justify-center" role="img" aria-label="GPA dial"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="border rounded-sm p-4 text-center" style="border-color:#1E3A8A; background:#F7F4EA;">
+          <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#6B7280;">Semester GPA</p>
+          <p id="statGpa" class="serif text-4xl font-bold" style="color:#1E3A8A;">&mdash;</p>
+        </div>
+        <div class="border rounded-sm p-4 text-center" style="border-color:#1E3A8A; background:#F7F4EA;">
+          <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#6B7280;">Letter</p>
+          <p id="statLetter" class="serif text-4xl font-bold" style="color:#B91C1C;">&mdash;</p>
+        </div>
+        <div class="border rounded-sm p-4 text-center" style="border-color:#1E3A8A; background:#F7F4EA;">
+          <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#6B7280;">Total credits</p>
+          <p id="statCredits" class="serif text-4xl font-bold" style="color:#1F2937;">&mdash;</p>
+        </div>
+        <div class="border rounded-sm p-4 text-center" style="border-color:#1E3A8A; background:#F7F4EA;">
+          <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#6B7280;">Quality points</p>
+          <p id="statPoints" class="serif text-4xl font-bold" style="color:#1F2937;">&mdash;</p>
+        </div>
+      </div>
+    </div>
+    <p class="serif italic text-sm mt-3 text-center" style="color:#6B7280;">GPA = &sum;(grade points &times; credits) &divide; &sum;(credits)</p>
+  </section>
+
+  <div class="rule-single my-6"></div>
+
+  <!-- 4. Semester ledger -->
+  <section aria-label="Semester history ledger">
+    <h3 class="serif text-lg font-bold mb-2" style="color:#1E3A8A;">4 &middot; Semester ledger — cumulative CGPA tracker</h3>
+    <p class="text-xs mb-3" style="color:#6B7280;">Save each finished semester below. Your ledger is stored privately in this browser (localStorage) and your cumulative CGPA updates automatically.</p>
+    <div class="flex flex-col sm:flex-row gap-2 mb-4">
+      <input id="semName" type="text" maxlength="60" placeholder="Semester name, e.g. Fall 2026 — Semester 3"
+        class="flex-1 border-2 rounded-sm px-3 py-2 text-sm" style="border-color:#1E3A8A;">
+      <button id="saveSemester" type="button" class="text-sm font-bold px-5 py-2 rounded-sm text-white" style="background:#1E3A8A;">Save semester to ledger</button>
+    </div>
+    <p id="ledgerMsg" class="text-xs mb-3 font-semibold" style="color:#B91C1C;"></p>
+    <div class="grid sm:grid-cols-2 gap-3 mb-4">
+      <div class="border-2 rounded-sm p-4 text-center" style="border-color:#1E3A8A; background:#1E3A8A;">
+        <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#F7F4EA;">Cumulative CGPA (saved semesters)</p>
+        <p id="statCgpa" class="serif text-4xl font-bold" style="color:#F7F4EA;">&mdash;</p>
+        <p id="statCgpaSub" class="text-xs mt-1" style="color:#D1D5DB;"></p>
+      </div>
+      <div class="border-2 rounded-sm p-4 text-center" style="border-color:#B91C1C; background:#fff;">
+        <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#B91C1C;">Projected CGPA (incl. current worksheet)</p>
+        <p id="statProj" class="serif text-4xl font-bold" style="color:#B91C1C;">&mdash;</p>
+        <p id="statProjSub" class="text-xs mt-1" style="color:#6B7280;"></p>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border" style="border-color:#1E3A8A;">
+        <thead><tr class="text-left text-[11px] uppercase tracking-wider" style="background:#1E3A8A; color:#F7F4EA;">
+          <th class="px-3 py-2 font-bold">Semester</th><th class="px-3 py-2 font-bold">Scale</th>
+          <th class="px-3 py-2 font-bold text-right">GPA</th><th class="px-3 py-2 font-bold text-right">Credits</th>
+          <th class="px-3 py-2 font-bold text-right">Points</th><th class="px-3 py-2"></th>
+        </tr></thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <button id="downloadCsv" type="button" class="text-xs font-bold px-4 py-2 rounded-sm border-2" style="border-color:#1E3A8A; color:#1E3A8A;">Download ledger (CSV)</button>
+      <button id="clearLedger" type="button" class="text-xs font-semibold px-4 py-2 rounded-sm border" style="border-color:#9CA3AF; color:#6B7280;">Clear ledger</button>
+      <button id="printReport" type="button" class="no-print text-xs font-semibold px-4 py-2 rounded-sm border" style="border-color:#9CA3AF; color:#6B7280;">Print report card</button>
+    </div>
+  </section>
+
+  <div class="rule-single my-6"></div>
+
+  <!-- 5. Planner -->
+  <section aria-label="GPA planner">
+    <h3 class="serif text-lg font-bold mb-2" style="color:#1E3A8A;">5 &middot; Target planner — what grades do you need?</h3>
+    <p class="text-xs mb-3" style="color:#6B7280;">Enter your current standing and your goal. GradeAxis computes the average grade you must earn in your remaining credits, with an honest feasibility verdict.</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <label class="block"><span class="text-xs font-bold uppercase tracking-wide" style="color:#1E3A8A;">Current CGPA</span>
+        <input id="plCur" type="number" step="0.01" min="0" placeholder="e.g. 3.10" class="mt-1 w-full border-2 rounded-sm px-3 py-2 text-sm" style="border-color:#1E3A8A;"></label>
+      <label class="block"><span class="text-xs font-bold uppercase tracking-wide" style="color:#1E3A8A;">Credits earned</span>
+        <input id="plEarned" type="number" step="1" min="0" placeholder="e.g. 45" class="mt-1 w-full border-2 rounded-sm px-3 py-2 text-sm" style="border-color:#1E3A8A;"></label>
+      <label class="block"><span class="text-xs font-bold uppercase tracking-wide" style="color:#1E3A8A;">Target CGPA</span>
+        <input id="plTarget" type="number" step="0.01" min="0" placeholder="e.g. 3.50" class="mt-1 w-full border-2 rounded-sm px-3 py-2 text-sm" style="border-color:#1E3A8A;"></label>
+      <label class="block"><span class="text-xs font-bold uppercase tracking-wide" style="color:#1E3A8A;">Credits remaining</span>
+        <input id="plRem" type="number" step="1" min="1" placeholder="e.g. 15" class="mt-1 w-full border-2 rounded-sm px-3 py-2 text-sm" style="border-color:#1E3A8A;"></label>
+    </div>
+    <button id="planBtn" type="button" class="text-sm font-bold px-6 py-2.5 rounded-sm text-white" style="background:#B91C1C;">Calculate required grades</button>
+    <div id="planResult" class="hidden mt-4 border-2 rounded-sm p-4" style="border-color:#1E3A8A; background:#F7F4EA;">
+      <div class="flex flex-wrap items-center gap-4">
+        <div><p class="text-[10px] uppercase tracking-widest font-bold" style="color:#6B7280;">Required average</p>
+          <p class="serif text-3xl font-bold" style="color:#1E3A8A;"><span id="planReq">&mdash;</span> <span id="planLetter" class="text-xl" style="color:#B91C1C;"></span></p></div>
+        <div><p class="text-[10px] uppercase tracking-widest font-bold" style="color:#6B7280;">Verdict</p>
+          <p id="planVerdict" class="text-sm font-bold px-3 py-1.5 rounded-full inline-block"></p></div>
+      </div>
+      <p id="planDetail" class="text-xs mt-2" style="color:#4B5563;"></p>
+      <p class="text-[11px] mt-2 italic" style="color:#9CA3AF;">Math: required = (target &times; total credits &minus; earned points) &divide; remaining credits.</p>
+    </div>
+  </section>
+
+  <div class="rule-single my-6"></div>
+
+  <!-- 6. Conversion tables -->
+  <section aria-label="Conversion reference tables">
+    <h3 class="serif text-lg font-bold mb-2" style="color:#1E3A8A;">6 &middot; Conversion reference — % &harr; letter &harr; grade points</h3>
+    <p class="text-xs mb-3" style="color:#6B7280;">Quick lookup tables. Percent bands are the widely used US-style cutoffs; Indian boards often use % &divide; 10 for CGPA, and German universities publish their own percent equivalents.</p>
+    <div id="convTables" class="grid md:grid-cols-3 gap-4"></div>
+    <ul class="text-xs mt-3 space-y-1 list-disc pl-5" style="color:#4B5563;">
+      <li><strong>Indian boards (CBSE-style):</strong> percentage &asymp; CGPA &times; 9.5. So a 9.0 CGPA &asymp; 85.5%.</li>
+      <li><strong>10-point universities:</strong> CGPA &asymp; percentage &divide; 10 (e.g. 82% &asymp; 8.2).</li>
+      <li><strong>German (TUM-style) conversion:</strong> German grade = 1 + 3 &times; (best grade &minus; your grade) &divide; (best grade &minus; lowest passing grade).</li>
+    </ul>
+  </section>
+
+  <div class="rule-double mt-6 pt-3 flex items-center justify-between">
+    <p class="serif italic text-xs" style="color:#6B7280;">End of worksheet &mdash; GradeAxis</p>
+    <p class="serif text-xs font-bold" style="color:#1E3A8A;">Registrar&rsquo;s seal: GA &#10003;</p>
+  </div>
+</div>
+</main>
+
+<!-- BOTTOM AD -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pb-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="464498"></script>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEO ARTICLE ============ -->
+<div class="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
+<article id="seo-article" class="report-card rounded-sm p-6 sm:p-10">
+  <p class="text-[11px] tracking-[0.25em] uppercase font-bold mb-2" style="color:#B91C1C;">GradeAxis Study Guide</p>
+  <h2 class="serif text-3xl font-bold mb-6" style="color:#1E3A8A;">The Complete Guide to Calculating GPA and CGPA on Every Major Scale</h2>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">What exactly is a GPA?</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">A Grade Point Average (GPA) is a single number that summarizes your academic performance over a set of courses. Instead of listing every grade you earned, schools convert each letter grade into grade points, weight those points by the number of credits each course carries, and then average the result. The formula is beautifully simple: GPA equals the sum of grade points multiplied by credits, divided by the sum of credits. In symbols, GPA = &sum;(grade points &times; credits) &divide; &sum;(credits). Because credits act as weights, a four-credit core subject influences your GPA twice as much as a two-credit elective. This is the step students most often skip when they try to average their grades by hand, and it is the reason a poor grade in a heavy required course hurts far more than the same grade in a light elective.</p>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">The term SGPA (Semester Grade Point Average) means the GPA of one semester or term, while CGPA (Cumulative Grade Point Average) means the average across all semesters completed so far. Your CGPA is not the average of your SGPAs — it is the total quality points earned across every semester divided by the total credits attempted. Averaging SGPAs directly gives the wrong answer whenever semesters carry different credit loads, a mistake that quietly distorts many hand calculations.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">How to calculate GPA step by step</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">Let us walk through a concrete example on the standard US 4.0 scale. Suppose a student takes four courses: Calculus (4 credits, grade A), Physics (4 credits, grade B+), English (3 credits, grade A&minus;), and History (3 credits, grade B). First, convert each letter grade to points: A is 4.0, B+ is 3.3, A&minus; is 3.7, and B is 3.0. Next, multiply points by credits for each course: Calculus gives 4.0 &times; 4 = 16.0, Physics gives 3.3 &times; 4 = 13.2, English gives 3.7 &times; 3 = 11.1, and History gives 3.0 &times; 3 = 9.0. Add the quality points: 16.0 + 13.2 + 11.1 + 9.0 = 49.3. Add the credits: 4 + 4 + 3 + 3 = 14. Finally divide: 49.3 &divide; 14 = 3.52. The semester GPA is 3.52, which sits between B+ and A&minus;. GradeAxis performs exactly this arithmetic the moment you type, and it shows the per-course points so you can audit every line.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">The 4.0 scale: the American standard</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">The 4.0 scale dominates US high schools and universities. Its grade-point mapping is: A = 4.0, A&minus; = 3.7, B+ = 3.3, B = 3.0, B&minus; = 2.7, C+ = 2.3, C = 2.0, C&minus; = 1.7, D+ = 1.3, D = 1.0, and F = 0. Some schools drop the plus/minus refinements and use only whole letters, but the mapping above is the version most colleges expect when they ask for your GPA on a 4.0 scale. A 3.5 or higher is generally considered strong, and 3.7 or above is competitive at selective institutions. International students should note that many US universities recalculate foreign transcripts onto this scale themselves, so the number you compute is an estimate for planning rather than an official figure.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">The 5.0 scale</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">The 5.0 scale appears in several forms. In US high schools it is usually the weighted ceiling: regular courses follow the 4.0 mapping while AP and IB courses add a full point, so an A in AP Calculus counts as 5.0. In other countries, including parts of the Middle East, Nigeria, and some European institutions, the 5.0 scale is simply the native grading scale where A = 5.0, B = 4.0, C = 3.0, D = 2.0, and F = 0. GradeAxis supports the full plus/minus version: A = 5.0, A&minus; = 4.7, B+ = 4.3, B = 4.0, B&minus; = 3.7, C+ = 3.3, C = 3.0, C&minus; = 2.7, D+ = 2.3, D = 2.0, F = 0. If your school uses a 5.0 scale without plus/minus grades, just pick the whole letters and the math stays correct.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">The Indian 10.0 CGPA scale</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">India runs on a 10-point CGPA system at both school and university level, though the letter labels differ by board. CBSE schools historically used grades like A1 and A2, while universities such as Anna University, VTU, and SPPU use O (Outstanding) = 10, A+ = 9, A = 8, B+ = 7, B = 6, C = 5, D = 4, and F/U = 0. The SGPA for a semester is the credit-weighted average of these points, and the CGPA is the credit-weighted average across semesters — exactly the same structure as the US formula, only with a different point mapping. Two conversions matter constantly for Indian students. First, percentage to CGPA: many universities treat CGPA as roughly percentage divided by 10, so 82% is about 8.2. Second, CGPA to percentage for CBSE-style reporting: percentage &asymp; CGPA &times; 9.5, so a 9.0 CGPA is about 85.5%. Students applying abroad then face the 10-to-4 conversion, where there is no single official formula — credential evaluators weigh your institution, your rank, and your board, which is why GradeAxis shows letter-equivalent conversions as planning estimates and labels them honestly.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">The German 1.0–5.0 scale: upside down by design</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">Germany inverts the logic most students know: 1.0 is the best possible grade and 5.0 means fail. The official descriptors run from 1.0 (sehr gut, very good) through 2.0 (gut, good), 3.0 (befriedigend, satisfactory), and 4.0 (ausreichend, sufficient), down to 5.0 (nicht ausreichend, failed). Intermediate steps of 0.3 are standard — 1.3, 1.7, 2.3, 2.7, 3.3, 3.7 — giving the familiar ladder A = 1.0, A&minus; = 1.3, B+ = 1.7, B = 2.0, B&minus; = 2.3, C+ = 2.7, C = 3.0, C&minus; = 3.3, D+ = 3.7, D = 4.0, F = 5.0. Because lower is better, averaging works the same way arithmetically but the interpretation flips: a 1.5 average is excellent, a 2.5 is respectable, and anything approaching 4.0 is a warning sign. German universities converting foreign grades often use the modified Bavarian formula — German grade = 1 + 3 &times; (best grade &minus; your grade) &divide; (best grade &minus; lowest passing grade) — which is why GradeAxis lists that formula in its reference section. If you are an Indian or American student eyeing a German master&rsquo;s program, computing your average on the German scale first saves you from misreading your own transcript.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">Weighted vs. unweighted GPA</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">An unweighted GPA treats every course equally: an A is 4.0 whether it came from regular English or AP Physics. A weighted GPA adds a rigor bonus — conventionally +0.5 for Honors courses and +1.0 for AP or IB courses — so an A in AP Calculus counts as 5.0. Colleges like to see both numbers: the unweighted GPA shows raw achievement, while the weighted GPA rewards students who challenged themselves. This is also why weighted GPAs can exceed 4.0, which confuses students the first time they see a 4.3 on a classmate&rsquo;s profile. Two caveats matter. First, weighting policies differ by school — some districts use +0.5 for AP instead of +1.0, and some do not weight at all — so always check your school&rsquo;s official policy before reporting a number. Second, a failing grade stays failing: an F earns 0 points even in an AP course, because no rigor bonus can rescue a course you did not pass. GradeAxis follows both conventions, and on the German scale it applies the mirror image (&minus;0.5 for Honors, &minus;1.0 for AP) since lower is better there.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">GPA vs. CGPA: why the distinction matters</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">Your semester GPA answers &ldquo;how did I do this term?&rdquo; while your CGPA answers &ldquo;how am I doing overall?&rdquo; The CGPA is the number on your degree, the one employers and graduate schools ask for, and the one scholarships hinge on. Because the CGPA pools every credit you have ever attempted, early semesters cast a long shadow: a weak first year requires many strong semesters to dilute, since each new semester is a smaller fraction of a growing total. The mathematics of recovery is unforgiving but clear. If you have completed 30 credits at a 2.8 and want a 3.2 by the time you reach 60 credits, the 30 remaining credits must average (3.2 &times; 60 &minus; 2.8 &times; 30) &divide; 30 = 3.6. That is the exact formula GradeAxis&rsquo;s planner uses, and it explains why setting realistic targets early beats heroic comebacks later. Tracking every semester in a ledger, as GradeAxis does locally in your browser, turns this abstract math into a visible trend you can actually steer.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">Planning: what grades do you need for your target?</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">Reverse-engineering your goal is one of the most useful calculations a student can do. Start with three numbers you already know: your current CGPA, the credits you have completed, and the credits you still have left. Pick a target CGPA. The required average for your remaining credits is (target &times; total credits &minus; current CGPA &times; completed credits) &divide; remaining credits. If the answer exceeds the maximum of your scale — above 4.0 on the US scale, below 1.0 on the German scale — the target is mathematically impossible, and no amount of effort changes arithmetic. If the answer sits just under the maximum, the goal is a stretch that demands near-perfect grades. If it sits near or below your current average, your existing pace will carry you there. The honest verdict matters more than the number: students who learn a target is impossible in October can adjust their plans, while students who discover it in May have lost a year. Run the planner at the start of every semester, not at the end.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">Converting between percentage, letter grades, and GPA</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">Three representations of the same performance circulate in education: percentages, letter grades, and grade points. The common US-style percent bands are A: 93–100, A&minus;: 90–92, B+: 87–89, B: 83–86, B&minus;: 80–82, C+: 77–79, C: 73–76, C&minus;: 70–72, D+: 67–69, D: 65–66, and F: below 65. Indian 10-point bands typically run O: 90–100, A+: 80–89, A: 70–79, B+: 60–69, B: 50–59, C: 40–49, D: 35–39, F: below 35, though individual universities publish their own tables. German percent equivalents are roughly 1.0: 95–100 down through 4.0: 50–54, with anything below 50 a 5.0 fail. To convert, go through the letter grade: 88% is a B+, which is 3.3 on the 4.0 scale and 1.7 on the German scale. GradeAxis&rsquo;s reference tables lay all three columns side by side so you never have to guess, and the calculator converts any GPA value across scales through its letter equivalent.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">Common GPA mistakes to avoid</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">The most frequent error is averaging letter grades without credits — treating a 2-credit lab and a 4-credit core subject as equals. Next comes averaging SGPAs instead of pooling points and credits, which silently misstates the CGPA whenever semesters differ in size. Students also forget that retaken courses follow their institution&rsquo;s repeat policy: some schools replace the old grade, others average both attempts, and some count both. Transfer credits usually count toward degree requirements but not toward the GPA at the new institution. Pass/fail and audit courses carry no grade points and must be excluded from the denominator. Finally, mixing scales — averaging a 10-point CGPA with a 4.0 GPA — produces nonsense; convert everything to one scale first. A calculator that shows per-course points, like GradeAxis does, makes each of these errors visible before they propagate.</p>
+
+  <h3 class="serif text-xl font-bold mt-8 mb-3" style="color:#1E3A8A;">Why keep a semester ledger</h3>
+  <p class="text-sm leading-7 mb-4" style="color:#374151;">A GPA is a snapshot; a ledger is a story. Recording each semester&rsquo;s GPA, credits, and quality points in one place lets you see trends — a rising sophomore year, a overloaded junior fall — that a single number hides. It also makes the CGPA calculation auditable: instead of trusting a portal&rsquo;s black box, you can recompute your cumulative average from your own records. Because GradeAxis stores the ledger only in your browser&rsquo;s local storage, the record is private by construction: no account, no server, nothing to leak. Export it to CSV at the end of each term as a backup, print the report card for your files, and start each new semester with the planner so every term begins with a target instead of a surprise.</p>
+</article>
+
+<!-- ============ FAQ ============ -->
+<section class="mt-8 report-card rounded-sm p-6 sm:p-10" aria-label="Frequently asked questions">
+  <p class="text-[11px] tracking-[0.25em] uppercase font-bold mb-2" style="color:#B91C1C;">Registrar&rsquo;s Office</p>
+  <h2 class="serif text-2xl font-bold mb-6" style="color:#1E3A8A;">Frequently Asked Questions</h2>
+  <div class="space-y-3">
+    <details class="faq-item border rounded-sm" style="border-color:#1E3A8A;">
+      <summary class="serif font-bold px-4 py-3 flex justify-between items-center gap-2" style="color:#1E3A8A;">How is GPA calculated from course grades and credits? <span aria-hidden="true">+</span></summary>
+      <p class="text-sm px-4 pb-4 leading-6" style="color:#374151;">Convert each letter grade to grade points (for example, A = 4.0, B+ = 3.3 on the US scale), multiply by the course&rsquo;s credits to get quality points, add up all quality points, and divide by total credits. So a 4-credit A (16.0 points) plus a 3-credit B (9.0 points) gives 25.0 &divide; 7 = 3.57. Credits act as weights, which is why heavy courses move your GPA more.</p>
+    </details>
+    <details class="faq-item border rounded-sm" style="border-color:#1E3A8A;">
+      <summary class="serif font-bold px-4 py-3 flex justify-between items-center gap-2" style="color:#1E3A8A;">What is the difference between GPA and CGPA? <span aria-hidden="true">+</span></summary>
+      <p class="text-sm px-4 pb-4 leading-6" style="color:#374151;">GPA (or SGPA) covers one semester; CGPA covers your entire program. Crucially, CGPA is total quality points across all semesters divided by total credits — not the average of your semester GPAs. Averaging SGPAs directly gives the wrong answer whenever semesters have different credit loads.</p>
+    </details>
+    <details class="faq-item border rounded-sm" style="border-color:#1E3A8A;">
+      <summary class="serif font-bold px-4 py-3 flex justify-between items-center gap-2" style="color:#1E3A8A;">How do I convert my Indian 10-point CGPA to a US 4.0 GPA? <span aria-hidden="true">+</span></summary>
+      <p class="text-sm px-4 pb-4 leading-6" style="color:#374151;">There is no single official formula. A common planning estimate goes through letter grades: map your Indian grade (O, A+, A, B+ &hellip;) to its US letter equivalent and read off the 4.0 points. Many evaluators also consider your institution and class rank, so treat any conversion as an estimate. GradeAxis&rsquo;s cross-scale converter uses the letter-equivalent method.</p>
+    </details>
+    <details class="faq-item border rounded-sm" style="border-color:#1E3A8A;">
+      <summary class="serif font-bold px-4 py-3 flex justify-between items-center gap-2" style="color:#1E3A8A;">How does the German 1.0–5.0 grading scale work? <span aria-hidden="true">+</span></summary>
+      <p class="text-sm px-4 pb-4 leading-6" style="color:#374151;">It is inverted: 1.0 is the best grade (sehr gut) and 5.0 means fail. The ladder runs 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, then 5.0 for failure. Averages are computed the same way as any GPA, but lower is better — a 1.5 average is excellent. German universities often convert foreign grades with the modified Bavarian formula.</p>
+    </details>
+    <details class="faq-item border rounded-sm" style="border-color:#1E3A8A;">
+      <summary class="serif font-bold px-4 py-3 flex justify-between items-center gap-2" style="color:#1E3A8A;">What is a weighted GPA, and how do Honors and AP classes affect it? <span aria-hidden="true">+</span></summary>
+      <p class="text-sm px-4 pb-4 leading-6" style="color:#374151;">A weighted GPA adds a rigor bonus: typically +0.5 for Honors and +1.0 for AP/IB courses, so an A in AP Calculus counts as 5.0 instead of 4.0. That is why weighted GPAs can exceed 4.0. Policies vary by school, and an F still earns 0 points even in a weighted course. On the German scale the bonus is mirrored (&minus;0.5 / &minus;1.0) because lower is better.</p>
+    </details>
+    <details class="faq-item border rounded-sm" style="border-color:#1E3A8A;">
+      <summary class="serif font-bold px-4 py-3 flex justify-between items-center gap-2" style="color:#1E3A8A;">What grades do I need to reach my target CGPA? <span aria-hidden="true">+</span></summary>
+      <p class="text-sm px-4 pb-4 leading-6" style="color:#374151;">Use the formula: required average = (target &times; total credits &minus; current CGPA &times; completed credits) &divide; remaining credits. If the result is above your scale&rsquo;s maximum (or below 1.0 on the German scale), the target is mathematically impossible. GradeAxis&rsquo;s planner runs this math and gives you a plain-English feasibility verdict.</p>
+    </details>
+  </div>
+</section>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How is GPA calculated from course grades and credits?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Convert each letter grade to grade points (A = 4.0, B+ = 3.3 on the US scale), multiply by the course's credits to get quality points, sum all quality points, and divide by total credits. Credits act as weights, so heavy courses move your GPA more." }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between GPA and CGPA?",
+      "acceptedAnswer": { "@type": "Answer", "text": "GPA (SGPA) covers one semester; CGPA covers the entire program. CGPA equals total quality points across all semesters divided by total credits — not the average of semester GPAs, which gives the wrong answer when semesters differ in credit load." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I convert my Indian 10-point CGPA to a US 4.0 GPA?",
+      "acceptedAnswer": { "@type": "Answer", "text": "There is no single official formula. A common planning estimate maps the Indian grade (O, A+, A, B+...) to its US letter equivalent and reads off the 4.0 points. Evaluators also consider institution and rank, so treat conversions as estimates." }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the German 1.0–5.0 grading scale work?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It is inverted: 1.0 is the best grade (sehr gut) and 5.0 means fail. Grades run 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, then 5.0. Averages are computed normally, but lower is better — a 1.5 average is excellent." }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a weighted GPA, and how do Honors and AP classes affect it?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A weighted GPA adds a rigor bonus — typically +0.5 for Honors and +1.0 for AP/IB — so an A in AP Calculus counts as 5.0. Policies vary by school, and an F still earns 0 points. On the German scale the bonus is mirrored because lower is better." }
+    },
+    {
+      "@type": "Question",
+      "name": "What grades do I need to reach my target CGPA?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Required average = (target x total credits - current CGPA x completed credits) / remaining credits. If the result exceeds the scale maximum (or drops below 1.0 on the German scale), the target is mathematically impossible." }
+    }
+  ]
+}
+</script>
+
+<footer class="no-print border-t-[3px] border-double mt-4" style="border-color:#1E3A8A; background:#1E3A8A;">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="serif text-lg font-bold" style="color:#F7F4EA;">Grade<span style="color:#F87171;">Axis</span> <span class="text-xs font-sans font-normal" style="color:#D1D5DB;">— free GPA &amp; CGPA calculator</span></p>
+    <div class="flex items-center gap-5 text-sm font-semibold" style="color:#F7F4EA;">
+      <a href="#top" class="hover:underline">Home</a>
+      <a href="https://fixoraa.tech" class="hover:underline">More Tools</a>
+    </div>
+  </div>
+  <p class="text-center text-[11px] pb-6" style="color:#9CA3AF;">Your grades never leave your browser. Made for students everywhere.</p>
+</footer>
+
+<!-- ============ PURE CALCULATION LOGIC (extracted by tests) ============ -->
+<script>
+/*__PURE_START__*/
+'use strict';
+
+var HONORS_BUMP = 0.5;
+var AP_BUMP = 1.0;
+
+var SCALES = {
+  '4.0': {
+    name: '4.0 (US)', max: 4.0, min: 0, lowerBetter: false,
+    grades: [['A',4.0],['A-',3.7],['B+',3.3],['B',3.0],['B-',2.7],['C+',2.3],['C',2.0],['C-',1.7],['D+',1.3],['D',1.0],['F',0]]
+  },
+  '5.0': {
+    name: '5.0 Scale', max: 5.0, min: 0, lowerBetter: false,
+    grades: [['A',5.0],['A-',4.7],['B+',4.3],['B',4.0],['B-',3.7],['C+',3.3],['C',3.0],['C-',2.7],['D+',2.3],['D',2.0],['F',0]]
+  },
+  '10.0': {
+    name: '10.0 (Indian CGPA)', max: 10, min: 0, lowerBetter: false,
+    grades: [['O',10],['A+',9],['A',8],['B+',7],['B',6],['C',5],['D',4],['F',0]]
+  },
+  'german': {
+    name: 'German 1.0–5.0', max: 5.0, min: 1.0, lowerBetter: true,
+    grades: [['A',1.0],['A-',1.3],['B+',1.7],['B',2.0],['B-',2.3],['C+',2.7],['C',3.0],['C-',3.3],['D+',3.7],['D',4.0],['F',5.0]]
+  }
+};
+
+// Percent -> letter bands (cutoff = minimum percent for that letter)
+var PERCENT_BANDS = [['A',93],['A-',90],['B+',87],['B',83],['B-',80],['C+',77],['C',73],['C-',70],['D+',67],['D',65],['F',0]];
+var PERCENT_MIDS  = { 'A':96.5,'A-':91,'B+':88,'B':84.5,'B-':81,'C+':78,'C':74.5,'C-':71,'D+':68,'D':65.5,'F':32.5 };
+var GERMAN_PERCENT_BANDS = [['A',95],['A-',90],['B+',85],['B',80],['B-',75],['C+',70],['C',65],['C-',60],['D+',55],['D',50],['F',0]];
+var GERMAN_PERCENT_MIDS  = { 'A':97.5,'A-':92,'B+':87.5,'B':82.5,'B-':77.5,'C+':72.5,'C':67.5,'C-':62,'D+':57.5,'D':52.5,'F':25 };
+var TEN_PERCENT_BANDS = [['O',90],['A+',80],['A',70],['B+',60],['B',50],['C',40],['D',35],['F',0]];
+
+function scaleIds() { return Object.keys(SCALES); }
+function scaleInfo(id) { return SCALES[id] || SCALES['4.0']; }
+
+function letterToPoints(scale, letter) {
+  var s = scaleInfo(scale);
+  for (var i = 0; i < s.grades.length; i++) {
+    if (s.grades[i][0] === letter) return s.grades[i][1];
+  }
+  return NaN;
+}
+
+function gpaToLetter(scale, points) {
+  if (!isFinite(points)) return '';
+  var s = scaleInfo(scale), best = '', bd = Infinity;
+  for (var i = 0; i < s.grades.length; i++) {
+    var d = Math.abs(s.grades[i][1] - points);
+    if (d < bd) { bd = d; best = s.grades[i][0]; }
+  }
+  return best;
+}
+
+function weightedBump(scale, type) {
+  var s = scaleInfo(scale);
+  if (type === 'honors') return s.lowerBetter ? -HONORS_BUMP : HONORS_BUMP;
+  if (type === 'ap') return s.lowerBetter ? -AP_BUMP : AP_BUMP;
+  return 0;
+}
+
+// Grade points for one course: gradePoint(scale, letter, courseType, weighted)
+// courseType: 'regular' | 'honors' | 'ap'
+function gradePoint(scale, letter, type, weighted) {
+  var s = scaleInfo(scale);
+  var base = letterToPoints(scale, letter);
+  if (!isFinite(base)) return NaN;
+  if (!weighted) return base;
+  var isFail = s.lowerBetter ? base >= s.max - 1e-9 : base <= s.min + 1e-9;
+  var v = isFail ? base : base + weightedBump(scale, type || 'regular');
+  var hi = s.lowerBetter ? s.max : (scale === '4.0' ? 5.0 : s.max); // weighted 4.0 ceiling is 5.0
+  return Math.min(hi, Math.max(s.min, v));
+}
+
+// courses: [{credits, grade, type}]  -> {gpa, points, credits, courses}
+function semesterGPA(courses, scale, weighted) {
+  var pts = 0, cr = 0, n = 0;
+  var list = courses || [];
+  for (var i = 0; i < list.length; i++) {
+    var c = list[i] || {};
+    var gp = gradePoint(scale, c.grade, c.type, weighted);
+    var ch = Number(c.credits);
+    if (!isFinite(gp) || !isFinite(ch) || ch <= 0) continue;
+    pts += gp * ch; cr += ch; n++;
+  }
+  if (cr <= 0) return { gpa: NaN, points: 0, credits: 0, courses: 0 };
+  return { gpa: pts / cr, points: pts, credits: cr, courses: n };
+}
+
+// semesters: [{points, credits}] -> {cgpa, points, credits}
+function cumulativeCGPA(semesters) {
+  var pts = 0, cr = 0;
+  var list = semesters || [];
+  for (var i = 0; i < list.length; i++) {
+    var p = Number(list[i].points), c = Number(list[i].credits);
+    if (isFinite(p) && isFinite(c) && c > 0) { pts += p; cr += c; }
+  }
+  if (cr <= 0) return { cgpa: NaN, points: 0, credits: 0 };
+  return { cgpa: pts / cr, points: pts, credits: cr };
+}
+
+// Planner math: required = (target*totalCredits - earnedPoints) / remainingCredits
+function planRequired(currentGPA, earnedCredits, targetGPA, remainingCredits) {
+  var c = Number(currentGPA), e = Number(earnedCredits),
+      t = Number(targetGPA), r = Number(remainingCredits);
+  if (!isFinite(c) || !isFinite(e) || !isFinite(t) || !isFinite(r) || e < 0 || r <= 0)
+    return { required: NaN, ok: false };
+  return { required: (t * (e + r) - c * e) / r, ok: true };
+}
+
+function plannerBounds(scale, weighted) {
+  var s = scaleInfo(scale);
+  if (s.lowerBetter) return { best: s.min, worst: s.max };
+  return { best: (weighted && scale === '4.0') ? 5.0 : s.max, worst: s.min };
+}
+
+function planVerdict(scale, required, currentGPA, weighted) {
+  var s = scaleInfo(scale), b = plannerBounds(scale, weighted);
+  if (!isFinite(required))
+    return { label: 'Enter valid numbers', tone: 'neutral', detail: 'Fill in all four planner fields with valid numbers.' };
+  var c = Number(currentGPA);
+  var impossible = s.lowerBetter ? required < b.best - 1e-9 : required > b.best + 1e-9;
+  if (impossible) return s.lowerBetter
+    ? { label: 'Not possible', tone: 'bad', detail: 'Even a perfect 1.0 in every remaining credit is not enough — and on the German scale, lower is better.' }
+    : { label: 'Not possible', tone: 'bad', detail: 'Even perfect grades in every remaining credit fall short. Lower the target or plan more credits.' };
+  if (s.lowerBetter) {
+    if (required <= 1.3) return { label: 'Stretch — near-perfect marks needed', tone: 'warn', detail: 'You need close to 1.0 (sehr gut) across all remaining credits.' };
+    if (isFinite(c) && required < c - 0.3) return { label: 'Achievable — improve on your average', tone: 'good', detail: 'You need a better (lower) average than your current one.' };
+    return { label: 'Within reach', tone: 'good', detail: 'Your current pace is enough to hit this target.' };
+  }
+  if (required >= b.best - 0.3) return { label: 'Stretch — nearly all top grades needed', tone: 'warn', detail: 'Almost every remaining course must be an A (or its weighted equivalent).' };
+  if (isFinite(c) && required > c + 0.3) return { label: 'Achievable — aim above your average', tone: 'good', detail: 'You need grades above your current average in the remaining credits.' };
+  return { label: 'Within reach', tone: 'good', detail: 'Keep up your current pace and the target is yours.' };
+}
+
+function percentToLetter(percent, scale) {
+  if (!isFinite(percent) || percent < 0) return '';
+  var bands = scale === 'german' ? GERMAN_PERCENT_BANDS : (scale === '10.0' ? TEN_PERCENT_BANDS : PERCENT_BANDS);
+  for (var i = 0; i < bands.length; i++) {
+    if (percent >= bands[i][1]) return bands[i][0];
+  }
+  return 'F';
+}
+
+function percentToGPA(percent, scale) {
+  if (!isFinite(percent) || percent < 0) return NaN;
+  if (scale === '10.0') return Math.min(10, Math.max(0, percent / 10)); // %/10 convention
+  return letterToPoints(scale, percentToLetter(percent, scale));
+}
+
+function gpaToPercent(gpa, scale) {
+  if (!isFinite(gpa)) return NaN;
+  if (scale === '10.0') return Math.min(100, Math.max(0, gpa / 10 * 100));
+  var l = gpaToLetter(scale, gpa);
+  var mids = scale === 'german' ? GERMAN_PERCENT_MIDS : PERCENT_MIDS;
+  return mids[l] !== undefined ? mids[l] : NaN;
+}
+
+// Cross-scale conversion through the canonical letter grade
+function convertScale(points, fromScale, toScale) {
+  if (!isFinite(points)) return NaN;
+  if (fromScale === toScale) return points;
+  var l = gpaToLetter(fromScale, points);
+  if (!l) return NaN;
+  return letterToPoints(toScale, l);
+}
+
+// Semicircle gauge SVG for a GPA value on a scale
+function gpaDialSVG(gpa, scale) {
+  var s = scaleInfo(scale);
+  var W = 220, H = 132, cx = 110, cy = 106, r = 82;
+  var frac = isFinite(gpa)
+    ? (s.lowerBetter ? (s.max - gpa) / (s.max - s.min) : (gpa - s.min) / (s.max - s.min))
+    : 0;
+  var f = Math.min(1, Math.max(0, frac));
+  var a1 = Math.PI * (1 - f);
+  var x1 = (cx + r * Math.cos(a1)).toFixed(1), y1 = (cy + r * Math.sin(a1)).toFixed(1);
+  var large = f > 0.5 ? 1 : 0;
+  var label = isFinite(gpa) ? gpa.toFixed(2) : '—';
+  var fg = s.lowerBetter ? '#B91C1C' : '#1E3A8A';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" width="220" height="132" role="img" aria-label="GPA dial">' +
+    '<path d="M ' + (cx - r) + ' ' + cy + ' A ' + r + ' ' + r + ' 0 0 1 ' + (cx + r) + ' ' + cy + '" fill="none" stroke="#E5E0D0" stroke-width="14" stroke-linecap="round"/>' +
+    '<path d="M ' + (cx - r) + ' ' + cy + ' A ' + r + ' ' + r + ' 0 ' + large + ' 1 ' + x1 + ' ' + y1 + '" fill="none" stroke="' + fg + '" stroke-width="14" stroke-linecap="round"/>' +
+    '<text x="' + cx + '" y="' + (cy - 12) + '" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="bold" fill="#1F2937">' + label + '</text>' +
+    '<text x="' + cx + '" y="' + (cy + 14) + '" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#6B7280">' + s.name + ' scale</text>' +
+    '</svg>';
+}
+
+// Ledger helpers
+function saveSemester(list, entry, maxN) {
+  maxN = maxN || 24;
+  return [entry].concat(list || []).slice(0, maxN);
+}
+function ledgerToCSV(entries) {
+  var head = 'Semester,Date,Scale,Weighted,GPA,Credits,Quality Points';
+  var rows = (entries || []).map(function (e) {
+    function q(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
+    return [q(e.name), q(e.date), q(e.scale), q(e.weighted ? 'yes' : 'no'),
+            q(fmt2(e.gpa)), q(e.credits), q(fmt2(e.points))].join(',');
+  });
+  return [head].concat(rows).join('\n');
+}
+function fmt2(x) { return isFinite(x) ? Number(x).toFixed(2) : ''; }
+/*__PURE_END__*/
+</script>
+
+<!-- ============ APP WIRING (DOM) ============ -->
+<script>
+(function () {
+  'use strict';
+  function $(id) { return document.getElementById(id); }
+  var LEDGER_KEY = 'gradeaxis-semesters-v1';
+
+  var state = { scale: '4.0', weighted: false, semesters: loadLedger() };
+  var courses = [
+    { name: 'Mathematics', credits: 4, grade: 'A',  type: 'regular' },
+    { name: 'English Literature', credits: 3, grade: 'B+', type: 'regular' },
+    { name: 'Physics', credits: 4, grade: 'B',  type: 'honors' },
+    { name: 'History', credits: 3, grade: 'A-', type: 'ap' }
+  ];
+
+  var SCALE_NOTES = {
+    '4.0': 'US standard: A = 4.0 … F = 0. Weighted mode adds +0.5 (Honors) / +1.0 (AP/IB), ceiling 5.0.',
+    '5.0': 'Five-point scale: A = 5.0 … F = 0. Used by many high schools and universities worldwide.',
+    '10.0': 'Indian CGPA style: O = 10, A+ = 9, A = 8, B+ = 7, B = 6, C = 5, D = 4, F = 0.',
+    'german': 'Inverted scale: 1.0 is best, 5.0 is fail. Weighted mode subtracts 0.5 / 1.0 (floor 1.0).'
+  };
+  var TYPE_LABELS = { regular: 'Regular', honors: 'Honors', ap: 'AP / IB' };
+
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  function loadLedger() {
+    try { var v = JSON.parse(localStorage.getItem(LEDGER_KEY)); return Array.isArray(v) ? v : []; }
+    catch (e) { return []; }
+  }
+  function persistLedger() {
+    try { localStorage.setItem(LEDGER_KEY, JSON.stringify(state.semesters)); } catch (e) {}
+  }
+
+  // ---------- scale tabs ----------
+  var tabs = document.querySelectorAll('#scaleTabs button');
+  tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var oldScale = state.scale, nu = btn.getAttribute('data-scale');
+      if (oldScale === nu) return;
+      var oldGrades = scaleInfo(oldScale).grades, nuGrades = scaleInfo(nu).grades;
+      courses.forEach(function (c) {
+        var idx = -1;
+        for (var i = 0; i < oldGrades.length; i++) if (oldGrades[i][0] === c.grade) { idx = i; break; }
+        c.grade = idx >= 0 ? nuGrades[Math.min(idx, nuGrades.length - 1)][0] : nuGrades[0][0];
+      });
+      state.scale = nu;
+      tabs.forEach(function (b) { b.classList.toggle('active', b === btn); });
+      $('scaleNote').textContent = SCALE_NOTES[nu];
+      buildRows(); renderAll();
+    });
+  });
+  $('scaleNote').textContent = SCALE_NOTES['4.0'];
+  $('weightedToggle').addEventListener('change', function (e) {
+    state.weighted = e.target.checked;
+    buildRows(); renderAll();
+  });
+
+  // ---------- course rows ----------
+  function gradeOptions(sel) {
+    return scaleInfo(state.scale).grades.map(function (g) {
+      return '<option value="' + g[0] + '"' + (g[0] === sel ? ' selected' : '') + '>' + g[0] + '</option>';
+    }).join('');
+  }
+  function typeOptions(sel) {
+    return ['regular', 'honors', 'ap'].map(function (t) {
+      return '<option value="' + t + '"' + (t === sel ? ' selected' : '') + '>' + TYPE_LABELS[t] + '</option>';
+    }).join('');
+  }
+  function buildRows() {
+    var box = $('courseRows'); box.innerHTML = '';
+    courses.forEach(function (c, i) {
+      var row = document.createElement('div');
+      row.className = 'grid grid-cols-2 md:grid-cols-12 gap-2 items-end border rounded-sm p-2';
+      row.style.borderColor = '#E5E0D0'; row.style.background = '#fff';
+      row.innerHTML =
+        '<label class="col-span-2 md:col-span-4 block"><span class="md:hidden text-[10px] font-bold uppercase" style="color:#1E3A8A;">Course</span>' +
+          '<input type="text" data-f="name" value="' + esc(c.name) + '" maxlength="60" placeholder="Course name" class="w-full border rounded-sm px-2 py-1.5 text-sm" style="border-color:#CBD5E1;"></label>' +
+        '<label class="col-span-1 md:col-span-2 block"><span class="md:hidden text-[10px] font-bold uppercase" style="color:#1E3A8A;">Credits</span>' +
+          '<input type="number" data-f="credits" value="' + esc(c.credits) + '" min="0" max="12" step="0.5" class="w-full border rounded-sm px-2 py-1.5 text-sm" style="border-color:#CBD5E1;"></label>' +
+        '<label class="col-span-1 md:col-span-2 block"><span class="md:hidden text-[10px] font-bold uppercase" style="color:#1E3A8A;">Grade</span>' +
+          '<select data-f="grade" class="w-full border rounded-sm px-2 py-1.5 text-sm font-semibold" style="border-color:#CBD5E1;">' + gradeOptions(c.grade) + '</select></label>' +
+        '<label class="col-span-1 md:col-span-2 block"><span class="md:hidden text-[10px] font-bold uppercase" style="color:#1E3A8A;">Level</span>' +
+          '<select data-f="type" class="w-full border rounded-sm px-2 py-1.5 text-sm" style="border-color:#CBD5E1;">' + typeOptions(c.type) + '</select></label>' +
+        '<div class="col-span-1 md:col-span-1 md:text-right"><span class="md:hidden text-[10px] font-bold uppercase" style="color:#1E3A8A;">Pts</span>' +
+          '<p data-f="points" class="serif font-bold text-sm" style="color:#1E3A8A;"></p></div>' +
+        '<div class="col-span-2 md:col-span-1 md:text-right"><button type="button" data-f="remove" class="text-xs font-bold px-2 py-1.5 rounded-sm border" style="border-color:#FCA5A5; color:#B91C1C;" aria-label="Remove course">&times; Remove</button></div>';
+      row.addEventListener('input', function (e) {
+        var f = e.target.getAttribute('data-f');
+        if (f === 'name') c.name = e.target.value;
+        else if (f === 'credits') c.credits = e.target.value === '' ? '' : Number(e.target.value);
+        else if (f === 'grade') c.grade = e.target.value;
+        else if (f === 'type') c.type = e.target.value;
+        renderAll();
+      });
+      row.querySelector('[data-f="remove"]').addEventListener('click', function () {
+        courses.splice(i, 1);
+        if (!courses.length) courses.push({ name: '', credits: '', grade: scaleInfo(state.scale).grades[0][0], type: 'regular' });
+        buildRows(); renderAll();
+      });
+      box.appendChild(row);
+    });
+  }
+  $('addCourse').addEventListener('click', function () {
+    courses.push({ name: '', credits: '', grade: scaleInfo(state.scale).grades[0][0], type: 'regular' });
+    buildRows(); renderAll();
+    var rows = $('courseRows').children;
+    var inp = rows[rows.length - 1].querySelector('[data-f="name"]');
+    if (inp) inp.focus();
+  });
+  $('clearCourses').addEventListener('click', function () {
+    courses = [{ name: '', credits: '', grade: scaleInfo(state.scale).grades[0][0], type: 'regular' }];
+    buildRows(); renderAll();
+  });
+
+  // ---------- results ----------
+  function currentResult() { return semesterGPA(courses, state.scale, state.weighted); }
+  function renderResults() {
+    var r = currentResult();
+    $('gpaDial').innerHTML = gpaDialSVG(r.gpa, state.scale);
+    $('statGpa').textContent = isFinite(r.gpa) ? r.gpa.toFixed(2) : '—';
+    $('statLetter').textContent = isFinite(r.gpa) ? gpaToLetter(state.scale, r.gpa) : '—';
+    $('statCredits').textContent = r.courses ? r.credits : '—';
+    $('statPoints').textContent = r.courses ? r.points.toFixed(1) : '—';
+    var rows = $('courseRows').children;
+    courses.forEach(function (c, i) {
+      var cell = rows[i] && rows[i].querySelector('[data-f="points"]');
+      if (cell) {
+        var gp = gradePoint(state.scale, c.grade, c.type, state.weighted);
+        cell.textContent = isFinite(gp) ? gp.toFixed(1) : '–';
+      }
+    });
+  }
+
+  // ---------- ledger ----------
+  $('saveSemester').addEventListener('click', function () {
+    var name = $('semName').value.trim(), r = currentResult(), msg = $('ledgerMsg');
+    msg.textContent = '';
+    if (!name) { msg.textContent = 'Please give this semester a name first.'; return; }
+    if (!isFinite(r.gpa)) { msg.textContent = 'Add at least one valid course (grade + credits) before saving.'; return; }
+    state.semesters = saveSemester(state.semesters, {
+      id: Date.now(), name: name, date: new Date().toISOString().slice(0, 10),
+      scale: state.scale, weighted: state.weighted,
+      gpa: Number(r.gpa.toFixed(2)), credits: r.credits, points: Number(r.points.toFixed(2))
+    });
+    persistLedger();
+    $('semName').value = '';
+    msg.style.color = '#166534'; msg.textContent = 'Saved “' + name + '” to your ledger.';
+    setTimeout(function () { msg.style.color = '#B91C1C'; msg.textContent = ''; }, 3000);
+    renderLedger();
+  });
+  $('clearLedger').addEventListener('click', function () {
+    if (!state.semesters.length) return;
+    if (confirm('Delete all saved semesters? This cannot be undone.')) {
+      state.semesters = []; persistLedger(); renderLedger();
+    }
+  });
+  $('downloadCsv').addEventListener('click', function () {
+    if (!state.semesters.length) { alert('Your ledger is empty — save a semester first.'); return; }
+    var blob = new Blob([ledgerToCSV(state.semesters)], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'gradeaxis-ledger.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  });
+  $('printReport').addEventListener('click', function () { window.print(); });
+
+  function renderLedger() {
+    var body = $('ledgerBody'); body.innerHTML = '';
+    if (!state.semesters.length) {
+      body.innerHTML = '<tr><td colspan="6" class="px-3 py-6 text-center text-sm italic" style="color:#9CA3AF;">No semesters saved yet — your ledger awaits its first entry.</td></tr>';
+    }
+    state.semesters.forEach(function (s) {
+      var tr = document.createElement('tr');
+      tr.className = 'border-t'; tr.style.borderColor = '#E5E0D0';
+      tr.innerHTML =
+        '<td class="px-3 py-2 font-semibold">' + esc(s.name) + '<span class="block text-[11px] font-normal" style="color:#9CA3AF;">' + esc(s.date) + '</span></td>' +
+        '<td class="px-3 py-2 text-xs">' + esc(scaleInfo(s.scale).name) + (s.weighted ? ' · W' : '') + '</td>' +
+        '<td class="px-3 py-2 text-right serif font-bold" style="color:#1E3A8A;">' + fmt2(s.gpa) + '</td>' +
+        '<td class="px-3 py-2 text-right">' + esc(s.credits) + '</td>' +
+        '<td class="px-3 py-2 text-right">' + fmt2(s.points) + '</td>' +
+        '<td class="px-3 py-2 text-right"><button type="button" class="text-xs font-bold px-2 py-1 rounded-sm border" style="border-color:#FCA5A5; color:#B91C1C;" aria-label="Delete semester">Delete</button></td>';
+      tr.querySelector('button').addEventListener('click', function () {
+        state.semesters = state.semesters.filter(function (x) { return x.id !== s.id; });
+        persistLedger(); renderLedger();
+      });
+      body.appendChild(tr);
+    });
+    var cum = cumulativeCGPA(state.semesters);
+    $('statCgpa').textContent = isFinite(cum.cgpa) ? cum.cgpa.toFixed(2) : '—';
+    $('statCgpaSub').textContent = state.semesters.length
+      ? state.semesters.length + ' semester' + (state.semesters.length > 1 ? 's' : '') + ' · ' + cum.credits + ' credits'
+      : 'Save a semester to begin';
+    var r = currentResult();
+    var proj = cumulativeCGPA(state.semesters.concat(isFinite(r.gpa) ? [{ points: r.points, credits: r.credits }] : []));
+    $('statProj').textContent = isFinite(proj.cgpa) ? proj.cgpa.toFixed(2) : '—';
+    $('statProjSub').textContent = isFinite(proj.cgpa) && isFinite(r.gpa)
+      ? 'Includes current worksheet (' + r.gpa.toFixed(2) + ')'
+      : 'Add courses above to preview';
+  }
+
+  // ---------- planner ----------
+  $('planBtn').addEventListener('click', function () {
+    var cur = parseFloat($('plCur').value), earned = parseFloat($('plEarned').value),
+        target = parseFloat($('plTarget').value), rem = parseFloat($('plRem').value);
+    var pr = planRequired(cur, earned, target, rem);
+    var box = $('planResult'); box.classList.remove('hidden');
+    if (!pr.ok) {
+      $('planReq').textContent = '—'; $('planLetter').textContent = '';
+      setVerdict({ label: 'Enter valid numbers', tone: 'neutral', detail: 'Fill in all four planner fields with valid numbers.' });
+      return;
+    }
+    var v = planVerdict(state.scale, pr.required, cur, state.weighted);
+    var b = plannerBounds(state.scale, state.weighted);
+    var inRange = scaleInfo(state.scale).lowerBetter
+      ? pr.required >= b.best - 1e-9 : pr.required <= b.best + 1e-9;
+    $('planReq').textContent = pr.required.toFixed(2);
+    $('planLetter').textContent = inRange ? '≈ ' + gpaToLetter(state.scale, pr.required) : '';
+    setVerdict(v);
+  });
+  function setVerdict(v) {
+    var el = $('planVerdict');
+    el.textContent = v.label;
+    var colors = { bad: ['#FEE2E2', '#B91C1C'], warn: ['#FEF3C7', '#92400E'], good: ['#DCFCE7', '#166534'], neutral: ['#F3F4F6', '#4B5563'] };
+    var c = colors[v.tone] || colors.neutral;
+    el.style.background = c[0]; el.style.color = c[1];
+    $('planDetail').textContent = v.detail + ' (Scale: ' + scaleInfo(state.scale).name + (state.weighted ? ', weighted' : '') + '.)';
+  }
+
+  // ---------- conversion tables ----------
+  function renderConvTables() {
+    var box = $('convTables'); box.innerHTML = '';
+    var defs = [
+      { title: '4.0 (US) scale', bands: PERCENT_BANDS, scale: '4.0' },
+      { title: '10.0 (Indian CGPA)', bands: TEN_PERCENT_BANDS, scale: '10.0' },
+      { title: 'German 1.0–5.0', bands: GERMAN_PERCENT_BANDS, scale: 'german' }
+    ];
+    defs.forEach(function (d) {
+      var rows = d.bands.map(function (b) {
+        return '<tr class="border-t" style="border-color:#E5E0D0;"><td class="px-2 py-1.5">' + b[1] + '+%</td>' +
+          '<td class="px-2 py-1.5 font-bold" style="color:#1E3A8A;">' + b[0] + '</td>' +
+          '<td class="px-2 py-1.5 text-right serif font-bold" style="color:#B91C1C;">' + letterToPoints(d.scale, b[0]).toFixed(1) + '</td></tr>';
+      }).join('');
+      var div = document.createElement('div');
+      div.className = 'border-2 rounded-sm overflow-hidden'; div.style.borderColor = '#1E3A8A';
+      div.innerHTML = '<p class="serif text-sm font-bold px-3 py-2" style="background:#1E3A8A; color:#F7F4EA;">' + d.title + '</p>' +
+        '<table class="w-full text-xs"><thead><tr class="text-left text-[10px] uppercase tracking-wider" style="color:#6B7280;">' +
+        '<th class="px-2 py-1.5">Percent</th><th class="px-2 py-1.5">Letter</th><th class="px-2 py-1.5 text-right">Points</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody></table>';
+      box.appendChild(div);
+    });
+  }
+
+  function renderAll() { renderResults(); renderLedger(); }
+  buildRows(); renderConvTables(); renderAll();
+})();
+</script>
+</body>
+</html>
